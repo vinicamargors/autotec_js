@@ -1,0 +1,213 @@
+body {
+    background: #303030; /* fallback for old browsers */
+  background: rgb(141,194,111);
+  background: linear-gradient(90deg, rgb(53, 53, 53) 0%, rgb(27, 27, 27) 50%);
+  font-family: "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;  
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+}
+
+header button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: #84e298;
+    color: black;
+}
+
+/* Configuração da grade principal */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Lista ocupa mais espaço */
+    gap: 20px; /* Espaço entre as colunas */
+    height: 100vh; /* Altura total da viewport */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#formularios {
+    color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas internas */
+    gap: 20px; /* Espaço entre os campos dentro do formulário */
+}
+
+#lista {
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Permite rolagem na lista de ordens */
+    color: white;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+}
+
+#addServiceButton{
+    background-color: #33b6b6;
+    color: #1f1e1e;
+    transition: background-color 0.3s, color 0.3s;
+    width: 50%;
+
+}
+#addServiceButton:hover{
+    background-color: #227070;
+    color: white;
+}
+
+button.removeService{
+    width: auto;
+    background-color: #f20000;
+}
+button.removeService:hover{
+    width: auto;
+    background-color: #e06a6a;
+    color: #000000;
+    font-weight: bolder;
+}
+
+form input, form select, form textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #303030;
+    color: #fff;
+}
+
+form button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #84e298;
+    color: black;
+}
+
+form button[type="submit"] {
+    
+    transition: background-color 0.3s, color 0.3s;
+}
+#criarordembtn{
+    width: 100%; /* Ajuste a largura para não ocupar 100% */
+}
+
+#ordersTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 2%;
+}
+
+#ordersTable th, #ordersTable td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#ordersTable th {
+    background-color: #1f1e1e;
+}
+
+#ordersTable tbody tr:nth-child(even) {
+    background-color: #272727;
+}
+
+#ordersTable th {
+    background-color: #1f1e1e;
+}
+
+#ordersTable tbody tr:nth-child(even) {
+    background-color: #272727;
+}
+
+/* Estilo para status */
+#ordersTable tbody tr[data-status="Orçamento"] {
+    background-color: #00ff22;
+}
+
+#ordersTable tbody tr[data-status="Em Manutenção"] {
+    background-color: #fda500;
+}
+
+#ordersTable tbody tr[data-status="Finalizado"] {
+    background-color: #0044fd;
+}
+
+/* Estilo para os botões na tabela de ordens de serviço */
+button.action-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 2px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Botão Editar */
+button.edit-button {
+    background-color: #007bff; /* Azul */
+    width: 100%;
+}
+
+button.edit-button:hover {
+    background-color: #92c6ff; /* Azul escuro */
+    color: black;
+}
+
+/* Botão Excluir */
+button.delete-button {
+    background-color: #dc3545; /* Vermelho */
+    
+}
+
+button.delete-button:hover {
+    background-color: #ffadb6; /* Vermelho escuro */
+    color: black;
+}
+
+/* Botão Imprimir */
+button.print-button {
+    background-color: #28a745; /* Verde */
+    
+}
+
+button.print-button:hover {
+    background-color: #86c794; /* Verde escuro */
+    color: black;
+}
+ 

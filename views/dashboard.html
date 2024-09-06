@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="/public/js/dashboard.js" defer></script>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="icon" href="/public/icons/favicon.ico" type="image/x-icon"> <!-- Favicon -->
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+        <button id="logoutButton">Sair</button>
+    </header>
+
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <button id="clientesButton">Clientes</button>
+        <button id="ordensButton">Ordens de Serviço</button>
+    </div>
+
+    <!-- Área principal do Dashboard -->
+    <div class="dashboard-content">
+        <div class="dashboard-info">
+            <div class="info-card">
+                <h3>Faturado Hoje</h3>
+                <p id="faturadoDia">R$ 0,00</p>
+            </div>
+            <div class="info-card">
+                <h3>Faturado no Mês</h3>
+                <p id="faturadoMes">R$ 0,00</p>
+            </div>
+            <div class="info-card">
+                <h3>Ordens Finalizadas Hoje</h3>
+                <p id="ordensDia">0</p>
+            </div>
+            <div class="info-card">
+                <h3>Ordens Finalizadas no Mês</h3>
+                <p id="ordensMes">0</p>
+            </div>
+            <div class="info-card">
+                <h3>Ordens em Manutenção</h3>
+                <p id="emManutencao">0</p>
+            </div>
+            <div class="info-card">
+                <h3>Clientes Cadastrados</h3>
+                <p id="clientes">0</p>
+            </div>
+        </div>
+        <footer>
+            <p>AUTOTEC RACING SERVIÇOS AUTOMOTIVOS LTDA</p>
+            <p>CNPJ: 05.873.451/0001-57</p>
+            <p>RUA NARCISO STURLINI, 818, CENTRO, OSASCO - SP</p>
+        </footer>
+    </div>
+
+    <script>
+        // Script para navegação
+        document.addEventListener('DOMContentLoaded', () => {
+            const clientesButton = document.getElementById('clientesButton');
+            const ordensButton = document.getElementById('ordensButton');
+
+            if (clientesButton) {
+                clientesButton.addEventListener('click', () => {
+                    window.location.href = '/clientes'; // Redireciona para a página de clientes
+                });
+            }
+
+            if (ordensButton) {
+                ordensButton.addEventListener('click', () => {
+                    window.location.href = '/ordens'; // Redireciona para a página de ordens de serviço
+                });
+            }
+        });
+    </script>
+</body>
+</html>

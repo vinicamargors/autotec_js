@@ -1,0 +1,9 @@
+runtime: nodejs
+env: standard
+entrypoint: node app.js
+
+handlers:
+- url: /public
+  static_dir: public
+- url: /.*
+  script: auto

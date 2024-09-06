@@ -1,0 +1,41 @@
+{
+  "name": "autotec_js",
+  "version": "1.0.0",
+  "main": "main.js",
+  "description": "Descrição do seu aplicativo",
+  "author": "Vinicius Camargo",
+  "scripts": {
+    "start": "node app.js",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^32.0.1",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.vcrszg.autotecjs",
+    "productName": "Autotec JS",
+    "files": [
+      "main.js",
+      "dist/**/*",
+      "node_modules/**/*",
+      "public/**/*",
+      "views/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "dependencies": {
+    "axios": "^1.7.4",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.1",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.3",
+    "mysql2": "^3.11.0",
+    "nodemon": "^3.1.4"
+  }
+}

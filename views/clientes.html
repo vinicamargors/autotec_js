@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Clientes</title>
+    <link rel="stylesheet" href="/public/css/clientes.css"> <!-- Link para o CSS -->
+    <link rel="icon" href="/public/icons/favicon.ico" type="image/x-icon"> <!-- Favicon -->
+    <style>
+        /* Estilo para a mensagem de erro */
+        .error-message {
+            display: none;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid red;
+            background-color: #fdd;
+            color: red;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="/public/images/GESTÃO.png" width="100px">
+        <img src="/public/images/icons8-customer-64.png" width="30px">
+        <h1>Gerenciamento de Clientes</h1>
+        <button onclick="window.location.href='dashboard.html'">Voltar ao Dashboard</button>
+    </header>
+
+    <div class="container">
+        <!-- Mensagem de Erro -->
+        <div id="errorMessage" class="error-message">
+            Não é possível excluir o cliente. O cliente tem ordens de serviço abertas.
+        </div>
+
+        <!-- Formulários de Criação e Edição -->
+        <div id="formularios">
+            <!-- Formulário para Criar Novo Cliente -->
+            <div>
+                <h2>Criar Novo Cliente</h2>
+                <form id="createClientForm">
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" name="nome" placeholder="Nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone:</label>
+                        <input type="text" id="telefone" name="telefone" placeholder="Telefone" maxlength="11" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco">Endereço:</label>
+                        <textarea style="resize: none" id="endereco" name="endereco" placeholder="Endereço" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cpf">CPF:</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="CPF" required maxlength="11">
+                    </div>
+                    <button type="submit">Criar Cliente</button>
+                </form>
+            </div>
+
+            <!-- Container de Edição -->
+            <div id="editClientContainer" style="display: none;">
+                <h2>Editar Cliente</h2>
+                <form id="editClientForm">
+                    <input type="hidden" id="editClientId" name="id">
+                    <div class="form-group">
+                        <label for="editNome">Nome:</label>
+                        <input type="text" id="editNome" name="nome" placeholder="Nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTelefone">Telefone:</label>
+                        <input type="text" id="editTelefone" name="telefone" placeholder="Telefone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEndereco">Endereço:</label>
+                        <textarea id="editEndereco" name="endereco" placeholder="Endereço" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCpf">CPF:</label>
+                        <input type="text" id="editCpf" name="cpf" placeholder="CPF" required>
+                    </div>
+                    <button type="submit">Salvar Alterações</button>
+                    <button type="button" id="cancelEdit">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabela de Clientes -->
+        <div id="lista">
+            <table id="clientsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                        <th>CPF</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Clientes serão listados aqui -->
+                </tbody>
+            </table>
+            <p>Não é possível excluir CLIENTE com OS aberta</p>
+        </div>
+    </div>
+
+    <script src="/public/js/clientes.js"></script> <!-- Link para o JavaScript -->
+</body>
+</html>

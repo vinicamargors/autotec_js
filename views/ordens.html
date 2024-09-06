@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens de Serviço</title>
+    <link rel="stylesheet" href="/public/css/ordens.css"> <!-- Ajuste o caminho se necessário -->
+    <link rel="icon" href="/public/icons/favicon.ico" type="image/x-icon"> <!-- Favicon -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <header>
+        <img src="/public/images/GESTÃO.png" width="100px">
+        <img src="/public/images/icons8-task-100.png" width="30px">
+        <h1>Ordens de Serviço</h1>
+        <button onclick="window.location.href='dashboard.html'">Voltar ao Dashboard</button>
+    </header>
+    <div class="container">
+        <div id="formularios">
+            <div>
+                <h2>CRIAR OS</h2>
+                <form id="createOrderForm">
+                    <div class="form-group">
+                        <label for="carro">Carro:</label>
+                        <input placeholder="Marca, modelo, ano" type="text" id="carro" name="carro" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="placa">Placa:</label>
+                        <input placeholder="Placa" type="text" id="placa" name="placa" maxlength="7" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tecnico">Técnico:</label>
+                        <input placeholder="Nome do Técnico responsável" type="text" id="tecnico" name="tecnico" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="idclie">Cliente:</label>
+                        <select id="idclie" name="idclie" required>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                    <div id="servicesContainer" class="form-group">
+                        <h3>Serviços</h3>
+                        <p style="color: red; font-size: 9px;" >INCLUIR MÃO DE OBRA</p>
+                        <input type="text" id="serviceName" placeholder="Nome do Serviço"><br>
+                        <input type="number" id="servicePrice" placeholder="Preço" step="0.01"><br>
+                        <button type="button" id="addServiceButton">Adicionar Serviço</button>
+                        
+                        <ul id="servicesList">
+                            <!-- Lista de serviços adicionados aparecerá aqui -->
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="servico">Observações:</label>
+                        <textarea style="resize: none;" placeholder="Ex: forma de pagamento, informações importantes, etc... " id="servico" name="servico"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="Orçamento">Orçamento</option>
+                            <option value="Em Manutenção">Em Manutenção</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valor">Valor:</label>
+                        <input placeholder="Valor calculado automaticamente" type="number" id="valor" name="valor" step="0.01" readonly>
+                    </div>
+
+                    <button id="criarordembtn" type="submit">Criar Ordem</button>
+                </form>
+            </div>
+            
+            <!-- Formulário de Edição -->
+            <div id="editOrderContainer" style="display: none;">
+                <form id="editOrderForm">
+                    <h2>EDITAR OS</h2>
+                    <input type="hidden" id="editOrderId" name="editOrderId">
+                    <div class="form-group">
+                        <label for="editData_os">Data da Ordem:</label>
+                        <input type="date" id="editData_os" name="data_os">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCarro">Carro:</label>
+                        <input type="text" id="editCarro" name="carro">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPlaca">Placa:</label>
+                        <input type="text" id="editPlaca" name="placa">
+                    </div>
+                    <div class="form-group">
+                        <label for="editTecnico">Técnico:</label>
+                        <input type="text" id="editTecnico" name="tecnico">
+                    </div>
+                    <div class="form-group">
+                        <label for="editValor">Valor:</label>
+                        <input type="number" id="editValor" name="valor" step="0.01" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editServico">Serviço:</label>
+                        <textarea id="editServico" name="servico"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editIdclie">Cliente:</label>
+                        <select id="editIdclie" name="idclie"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editStatus">Status:</label>
+                        <select id="editStatus" name="status">
+                            <option value="Orçamento">Orçamento</option>
+                            <option value="Em Manutenção">Em Manutenção</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                    </div>
+                    <button type="submit">Salvar</button>
+                    <button class="removeService" type="button" id="cancelEdit">Cancelar</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Tabela para listar ordens -->
+        <div id="lista">
+            <table id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Carro</th>
+                        <th>Placa</th>
+                        <th>Técnico</th>
+                        <th>Valor</th>
+                        <th>Serviço</th>
+                        <th>Cliente</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- As ordens serão inseridas aqui via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="/public/js/ordens.js" defer></script>
+    <script src="/public/js/print.js" defer></script>
+
+</body>
+</html>
