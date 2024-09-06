@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = document.cookie.split('sessionToken=')[1];
     if (!token) {
         console.error('Token de autenticação ausente');
-        // Opcional: Redirecione o usuário para a página de login
         window.location.href = '/login.html';
         return;
     }
@@ -46,12 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTotalValue() {
         const total = services.reduce((total, service) => total + service.price, 0);
         if (createOrderForm.style.display === 'none') {
-            // Atualizar o valor do campo de edição
-            if (editValor) {
-                editValor.value = total.toFixed(2);
-            }
+            editValor.value = total.toFixed(2);
         } else {
-            // Atualizar o valor do campo de criação
             valorInput.value = total.toFixed(2);
         }
     }
@@ -73,10 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Verifique o tipo de conteúdo da resposta
             const contentType = response.headers.get('Content-Type');
             if (!contentType || !contentType.includes('application/json')) {
-                const errorText = await response.text(); // Leia o texto da resposta
+                const errorText = await response.text();
                 throw new Error(`Resposta inesperada: ${response.status} - ${errorText}`);
             }
 
@@ -106,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao carregar ordens:', error);
         }
     }
-    
+
     async function loadClients() {
         try {
             const response = await fetch('/api/clientes', {
@@ -116,10 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Verifique o tipo de conteúdo da resposta
             const contentType = response.headers.get('Content-Type');
             if (!contentType || !contentType.includes('application/json')) {
-                const errorText = await response.text(); // Leia o texto da resposta
+                const errorText = await response.text();
                 throw new Error(`Resposta inesperada: ${response.status} - ${errorText}`);
             }
 
@@ -168,8 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             createOrderForm.reset();
-            services.length = 0; // Limpar a lista de serviços
-            updateServicesList(); // Atualizar a lista de serviços para refletir a limpeza
+            services.length = 0;
+            updateServicesList();
             updateTotalValue();
             loadOrders();
         } catch (error) {
@@ -192,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const ordem = await response.json();
+            
 
             const editOrderId = document.getElementById('editOrderId');
             const editData_os = document.getElementById('editData_os');
@@ -214,9 +208,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 editIdclieSelect.value = ordem.idclie;
                 editStatusSelect.value = ordem.status;
 
-                // Atualizar a lista de serviços
+                services.length = 0;
                 if (ordem.lista_servicos) {
-                    services.length = 0;
                     JSON.parse(ordem.lista_servicos).forEach(service => services.push(service));
                     updateServicesList();
                     updateTotalValue();
@@ -225,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 editOrderContainer.style.display = 'block';
                 currentEditOrderId = id;
             } else {
-                console.error('Um ou mais elementos de edição não foram encontrados no DOM.');
+                console.error('Um ou mais elementos do formulário de edição estão ausentes.');
             }
         } catch (error) {
             console.error('Erro ao editar ordem:', error);
@@ -242,8 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Erro ao excluir ordem: ${response.status} - ${errorText}`);
+                throw new Error('Erro ao excluir ordem');
             }
 
             loadOrders();
@@ -252,8 +244,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    cancelEditButton.addEventListener('click', () => {
+        editOrderContainer.style.display = 'none';
+        currentEditOrderId = null;
+        services.length = 0;
+        updateServicesList();
+        updateTotalValue();
+    });
+
+    function atualizarValorTotal() {
+        let valorTotal = 0;
+        const listaServicos = document.querySelectorAll('.servico-item'); // Ajuste o seletor conforme necessário
+    
+        listaServicos.forEach(servico => {
+            const valorServico = parseFloat(servico.querySelector('.valor-servico').textContent) || 0;
+            valorTotal += valorServico;
+        });
+    
+        document.querySelector('#campo-valor').value = valorTotal.toFixed(2);
+    }
+    
+    function salvarEdicao() {
+        const formData = new FormData(document.querySelector('#form-edicao'));
+        const listaServicos = [];
+        
+        document.querySelectorAll('.servico-item').forEach(servico => {
+            listaServicos.push({
+                descricao: servico.querySelector('.descricao-servico').textContent,
+                valor: parseFloat(servico.querySelector('.valor-servico').textContent) || 0
+            });
+        });
+    
+        formData.append('lista_servicos', JSON.stringify(listaServicos));
+        formData.append('valor', listaServicos.reduce((acc, s) => acc + s.valor, 0).toFixed(2));
+        
+        fetch('/api/os/' + id, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Ordem de serviço atualizada com sucesso') {
+                alert('Ordem de serviço atualizada com sucesso');
+            } else {
+                alert('Erro ao atualizar ordem de serviço');
+            }
+        });
+    }
+
     editOrderForm.addEventListener('submit', async (event) => {
         event.preventDefault();
+
+        if (currentEditOrderId === null) return;
 
         const formData = new FormData(editOrderForm);
         const data = {
@@ -261,11 +303,11 @@ document.addEventListener('DOMContentLoaded', () => {
             carro: formData.get('carro'),
             placa: formData.get('placa'),
             tecnico: formData.get('tecnico'),
-            valor: parseFloat(formData.get('valor')),
+            valor: parseFloat(editValor.value),
             servico: formData.get('servico'),
             idclie: parseInt(formData.get('idclie')),
             status: formData.get('status'),
-            lista_servicos: JSON.stringify(services) // Adicione a lista de serviços
+            lista_servicos: JSON.stringify(services)
         };
 
         try {
@@ -273,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${document.cookie.split('sessionToken=')[1]}`
                 },
                 body: JSON.stringify(data)
             });
@@ -283,20 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             editOrderContainer.style.display = 'none';
-            services.length = 0; // Limpar a lista de serviços
-            updateServicesList(); // Atualizar a lista de serviços para refletir a limpeza
+            currentEditOrderId = null;
+            services.length = 0;
+            updateServicesList();
             updateTotalValue();
             loadOrders();
         } catch (error) {
             console.error('Erro ao atualizar ordem:', error);
         }
-    });
-
-    cancelEditButton.addEventListener('click', () => {
-        editOrderContainer.style.display = 'none';
-        currentEditOrderId = null;
-        services.length = 0; // Limpar a lista de serviços
-        updateServicesList(); // Atualizar a lista de serviços para refletir a limpeza
     });
 
     loadOrders();

@@ -178,6 +178,33 @@ app.get('/api/os/:id', async (req, res) => {
   }
 });
 
+// Endpoint para atualizar uma ordem de serviço
+app.put('/api/os/:id', async (req, res) => {
+    const { id } = req.params;
+    const { data_os, carro, placa, tecnico, valor, servico, lista_servicos } = req.body;
+
+    try {
+        // Atualiza a ordem de serviço no banco de dados
+        await db.query(
+            `UPDATE tbos SET 
+                data_os = ?, 
+                carro = ?, 
+                placa = ?, 
+                tecnico = ?, 
+                valor = ?, 
+                servico = ?, 
+                lista_servicos = ? 
+            WHERE os = ?`,
+            [data_os, carro, placa, tecnico, valor, servico, JSON.stringify(lista_servicos), id]
+        );
+        res.status(200).json({ message: 'Ordem de serviço atualizada com sucesso' });
+    } catch (error) {
+        console.error('Erro ao atualizar ordem de serviço:', error);
+        res.status(500).json({ message: 'Erro ao atualizar ordem de serviço' });
+    }
+});
+
+
 app.get('/api/os', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM tbos ORDER BY os DESC');
@@ -189,6 +216,6 @@ app.get('/api/os', async (req, res) => {
 });
 
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
